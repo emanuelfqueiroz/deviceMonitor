@@ -47,20 +47,6 @@ public class ReadingsController : ControllerBase
         }
         var alerts = _alertService.GetAlerts(deviceReadingRequest);
 
-        var firmwareAlert = alerts.FirstOrDefault(a => a.AlertType == AlertType.FirmwareInvalid);
-        if (firmwareAlert is not null)
-        {
-            return BadFirmewareRequest(firmwareAlert);
-        }
         return Ok(alerts);
-    }
-
-    private ActionResult<IEnumerable<Alert>> BadFirmewareRequest(Alert firmewareAlert)
-    {
-        var modelState = new ModelStateDictionary();
-        modelState.AddModelError("FirmwareVersion", firmewareAlert.Message);
-
-        var problemDetails = new ValidationProblemDetails(modelState);
-        return ValidationProblem(problemDetails);
     }
 }
